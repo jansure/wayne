@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: mysql-system
+spec:
+ capacity:
+   storage: 40Gi
+ accessModes:
+ - ReadWriteMany
+ persistentVolumeReclaimPolicy: Retain
+ nfs:
+   server: 192.168.1.146
+   path: /data/qas/mysql
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: mysqlpvc
+ namespace: kube-system
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 40Gi
+

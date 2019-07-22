@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: mysql
+spec:
+ capacity:
+   storage: 40Gi
+ accessModes:
+ - ReadWriteMany
+ persistentVolumeReclaimPolicy: Retain
+ nfs:
+   server: 192.168.1.146
+   path: /data/qas
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: mysqlpvc
+ namespace: default
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 40Gi
+

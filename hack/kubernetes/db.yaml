@@ -1,0 +1,46 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: mysql
+  namespace: kube-system
+  labels:
+    app: mysql
+spec:
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:5.6
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+          name: dbport
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: root
+        volumeMounts:
+        - name: db
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: db
+        persistentVolumeClaim:
+              claimName: mysqlpvc
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: kube-system
+spec:
+  selector:
+    app: mysql
+  ports:
+  - name: mysqlport
+    protocol: TCP
+    port: 3306
+    targetPort: dbport
+
